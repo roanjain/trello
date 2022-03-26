@@ -1,40 +1,62 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
-import { selectCardList, deleteCard } from "./boardSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faCheck,
+    faPencilAlt,
+    faTrashAlt,
+} from "@fortawesome/fontawesome-free-solid";
+import {
+    deleteCard,
+    updateCardContentById
+} from "./boardSlice";
 
 const Card = ({ data }) => {
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-  const [editableCard, setEditableCard] = useState(false);
-  const [cardContent, setCardContent] = useState(data.title);
+    const [editableCard, setEditableCard] = useState(false);
+    const [cardContent, setCardContent] = useState(data.title);
 
-  const deleteCardById = (cardId) => {
-    dispatch(deleteCard(cardId));
-  };
+    const deleteCardById = (cardId) => {
+        dispatch(deleteCard(cardId));
+    };
 
-  const editCardContent = () => {
-    setEditableCard(true);
-  };
+    const editCardContent = () => {
+        setEditableCard(true);
+    };
 
-  console.log("cards==>>", data);
+    const updateContent = () => {
+        let payload = {
+            cardId: data.id,
+            content: cardContent
+        };
+        dispatch(updateCardContentById(payload));
+        setEditableCard(false);
+    };
 
-  return (
-    <div className="cardContainer">
-      <div className="cardContent">{cardContent}</div>
-      <div className="actionButtons">
-        {editableCard && (
-          <input
-            type="text"
-            value={cardContent}
-            onChange={(e) => setCardContent(e.value)}
-          />
-        )}
-        {!editableCard && <button onClick={editCardContent}>edit</button>}
-        <button onClick={() => deleteCardById(data.id)}>delete</button>
-      </div>
-    </div>
-  );
+    return (
+        <div className="cardContainer">
+            {editableCard && (
+                <div className="editableBox">
+                    <input
+                        type="text"
+                        value={cardContent}
+                        onChange={(e) => setCardContent(e.target.value)}
+                    />
+                    <span onClick={updateContent}><FontAwesomeIcon icon={faCheck} /></span>
+                </div>
+            )}
+            {!editableCard && (
+                <>
+                    <div className="cardContent">{cardContent}</div>
+                    <div className="actionButtons">
+                        <span onClick={editCardContent}><FontAwesomeIcon icon={faPencilAlt} /></span>
+                        <span onClick={() => deleteCardById(data.id)}><FontAwesomeIcon color="red" icon={faTrashAlt} /></span>
+                    </div>
+                </>
+            )}
+        </div>
+    );
 };
 
 export default Card;

@@ -1,26 +1,31 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import styles from "./dashboard.module.css";
-import { selectCardList } from "./boardSlice";
+import { selectCardList,addNewCardList } from "./boardSlice";
 import CardList from "./CardList";
+import {faPlus} from "@fortawesome/fontawesome-free-solid";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const Board = () => {
-  console.log("Rendering board component");
   const cardLists = useSelector(selectCardList);
+  const dispatch = useDispatch();
 
-  const addNewCardList = () => {};
+  const addCardList = () => {
+      dispatch(addNewCardList())
+  };
 
   return (
     <>
       <div className="cardListContainer">
         {cardLists &&
           cardLists.map((cardList) => {
-            return <CardList data={cardList} />;
+            return <CardList key={cardList.id} data={cardList} />;
           })}
       </div>
       <div className="addCardList">
-        <span onClick={addNewCardList}>+</span>
+        <span onClick={addCardList}>
+            <FontAwesomeIcon icon={faPlus}/>
+        </span>
       </div>
     </>
   );

@@ -4,11 +4,16 @@ import "./App.css";
 import Board from "./features/Dashboard/Board";
 
 function App() {
-  return (
-    <div className="App">
-      <Board />
-    </div>
-  );
+    return (
+        <>
+            <div className="header">Trello-Clone</div>
+            <div className="mainContainer">
+                <div className="cardListWrapper">
+                    <Board/>
+                </div>
+            </div>
+        </>
+    );
 }
 
 export default App;
